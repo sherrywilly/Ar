@@ -27,8 +27,10 @@ function load(msg) {
     param.onload = function () {
         ar = new ARController(msg.pw, msg.ph, param);
         var cameraMatrix = ar.getCameraMatrix();
+       console.log("rfgt")
 
         ar.addEventListener("getNFTMarker", function(ev) {
+            console.log("erteter")
             markerResult = {
               type: "found",
               matrixGL_RH: JSON.stringify(ev.data.matrixGL_RH),

@@ -59,11 +59,12 @@ var markers = {
         width: 1637,
         height: 2048,
         dpi: 215,
-        url: "./examples/DataNFT/pinball/pinball",
+        url: "./examples/DataNFT/pinball",
     },
 };
 
 function start(container, marker, video, input_width, input_height, canvas_draw, render_update, track_update) {
+  
     var vw, vh;
     var sw, sh;
     var pscale, sscale;
@@ -80,7 +81,6 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
     var load = function() {
         vw = input_width;
         vh = input_height;
-
         pscale = 320 / Math.max(vw, vh / 3 * 4);
         sscale = isMobile() ? window.outerWidth / input_width : 1;
 
@@ -113,6 +113,8 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
             var msg = ev.data;
             switch (msg.type) {
                 case "found": {
+                    console.log("image found")
+                    console.log(msg)
                     found(msg);
                     break;
                 }
@@ -129,6 +131,7 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
     var lastmsg = null;
     var found = function(msg) {
         lastmsg = msg;
+        // console.log("lastmsg",msg)
     };
 
     var lasttime = Date.now();
@@ -156,6 +159,7 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
         var mat = multiplyMatrices(proj, world);
 
         function glpointToCanvas(xyz) {
+            console.log(xyz)
             return {
                 x: (xyz.x + 1) * 0.5 * pw / pscale * sscale - ox / pscale * sscale,
                 y: (1 - xyz.y) * 0.5 * ph / pscale * sscale - oy / pscale * sscale,
@@ -191,6 +195,7 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
     function process() {
         context_process.fillStyle = "black";
         context_process.fillRect(0, 0, pw, ph);
+        
         context_process.drawImage(video, 0, 0, vw, vh, ox, oy, w, h);
 
         var imageData = context_process.getImageData(0, 0, pw, ph);

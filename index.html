@@ -13,8 +13,8 @@
 <div style="position:absolute; color:white; top:0;left:0" id="stats1"><div>Main</div></div>
 <div style="position:absolute; color:white; top:80px;left:0" id="stats2"><div>Worker</div></div>
 <div id="container">
-    <video id="video"></video>
-    <canvas style="position: absolute; left:0; top:0" id="canvas_draw"></canvas>
+    <video id="video" src="./mov_bbb.mp4"  autoplay></video>
+    <canvas style="position: absolute; left:0; top:0" id="canvas_draw" style="background-color:red;"></canvas>
 </div>
 
 <script src="./js/stats.min.js"></script>
@@ -37,6 +37,7 @@
 
     var container = document.getElementById('container');
     var video = document.getElementById('video');
+    video.pause()
     var canvas_draw = document.getElementById('canvas_draw');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -54,12 +55,15 @@
 
         navigator.mediaDevices.getUserMedia({video: hint}).then(function (stream) {
             video.srcObject = stream;
-            video.play();
             video.addEventListener("loadedmetadata", function() {
-                start(container, markers["pinball"], video, video.videoWidth, video.videoHeight, canvas_draw, function() {statsMain.update()}, function() {statsWorker.update()});
+                start(container, markers["pinball"], video, video.videoWidth, video.videoHeight, canvas_draw, function() {
+            
+                    statsMain.update()}, function() {statsWorker.update()});
             });
         });
     }
+
+  
 </script>
 </body>
 </html>
