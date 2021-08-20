@@ -10,11 +10,16 @@
     </style>
 </head>
 <body>
-<div style="position:absolute; color:white; top:0;left:0" id="stats1"><div>Main</div></div>
-<div style="position:absolute; color:white; top:80px;left:0" id="stats2"><div>Worker</div></div>
-<div id="container">
-    <video id="video" src="./mov_bbb.mp4"  autoplay></video>
+    <div style="position:absolute; color:white; top:0;left:0" id="stats1"><div>Main</div></div>
+    <div style="position:absolute; color:white; top:80px;left:0" id="stats2"><div>Worker</div></div>
+    <div id="container">
+    <video id="video" autoplay></video>
+    <video id="video2"  src="mov_bbb.mp4" loop controls autoplay="true"></video>
+
+   
     <canvas style="position: absolute; left:0; top:0" id="canvas_draw" style="background-color:red;"></canvas>
+</div>
+<div class="c2">
 </div>
 
 <script src="./js/stats.min.js"></script>
@@ -37,9 +42,9 @@
 
     var container = document.getElementById('container');
     var video = document.getElementById('video');
-    video.pause()
+    var video2 = document.getElementById('video2')
     var canvas_draw = document.getElementById('canvas_draw');
-
+  
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         var hint = {};
         if (isMobile()) {
@@ -56,9 +61,9 @@
         navigator.mediaDevices.getUserMedia({video: hint}).then(function (stream) {
             video.srcObject = stream;
             video.addEventListener("loadedmetadata", function() {
-                start(container, markers["pinball"], video, video.videoWidth, video.videoHeight, canvas_draw, function() {
+                start(video2, markers["pinball"], video, video.videoWidth, video.videoHeight, canvas_draw, function() {
             
-                    statsMain.update()}, function() {statsWorker.update()});
+                    statsMain.update()}, function() {statsWorker.update()},video2);
             });
         });
     }

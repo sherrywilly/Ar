@@ -120,6 +120,7 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
                 }
                 case "not found": {
                     found(null);
+                    video2.pause()
                     break;
                 }
             }
@@ -184,11 +185,16 @@ function start(container, marker, video, input_width, input_height, canvas_draw,
         var p4 = drawpoint(0, h, 0);
         context_draw.beginPath();
         context_draw.moveTo(p1.x, p1.y);
-        context_draw.lineTo(p2.x, p2.y);
-        context_draw.lineTo(p3.x, p3.y);
+        // context_draw.lineTo(p2.x, p2.y);
+        // context_draw.lineTo(p3.x, p3.y);
         context_draw.lineTo(p4.x, p4.y);
-        context_draw.closePath();
-        context_draw.strokeStyle = "red";
+        // context_draw.closePath();
+        context_draw.strokeStyle = "blue";
+        // context_draw.fillStyle = "blue"
+        // context_draw.fill()
+        context_draw.drawImage(container,0,0,video.videoWidth,video.videoHeight,p4.x,p3.x,600,600)
+        // context_draw.drawImage(container, 0, 0, vw, vh, ox, oy, w, h);
+        video2.play()
         context_draw.stroke();
     };
 
