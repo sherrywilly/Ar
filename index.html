@@ -1,103 +1,65 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel="stylesheet" href="style.css">
+    <title>NFT_test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
-    
-    <div id="stats" class="ui stats">
-        <div id="stats1" class="stats-item">
-          <p class="stats-item-title">
-            Main
-          </p>
-        </div>
-        <div id="stats2" class="stats-item">
-          <p class="stats-item-title">
-            Worker
-          </p>
-        </div>
-      </div>
-    <div id="app">
-        <video
-       
-          loop
-          autoplay
-          muted
-          playsinline
-          id="video">
-        </video>
-        <canvas id="canvas"></canvas>
-      </div>
+<div style="position:absolute; color:white; top:0;left:0" id="stats1"><div>Main</div></div>
+<div style="position:absolute; color:white; top:80px;left:0" id="stats2"><div>Worker</div></div>
+<div id="container">
+    <video id="video"></video>
+    <canvas style="position: absolute; left:0; top:0" id="canvas_draw"></canvas>
+</div>
 
-    <script src="https://raw.githack.com/kalwalt/jsartoolkitNFT/master/build/artoolkitNFT_wasm.js">
-    
-    </script>
-    <script src="./stat.js"></script>
-    <script src="./three.js"></script>
-    <script src="./three_worker.js"></script>
-    <script>
-        var statsMain = new Stats();
-        statsMain.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.getElementById( 'stats1' ).appendChild( statsMain.dom );
-        var statsWorker = new Stats();
-        statsWorker.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.getElementById( 'stats2' ).appendChild( statsWorker.dom );
-        var container = document.getElementById( 'app' );
-        var video = document.getElementById( 'video' );
-        var canvas = document.getElementById( 'canvas' );
-        console.log(video)
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            var hint = {
-              audio: false,
-              video: true
-            };
-            if( window.innerWidth < 800 ) {
-              var width = ( window.innerWidth < window.innerHeight ) ? 240 : 360;
-              var height = ( window.innerWidth < window.innerHeight ) ? 360 : 240;
-        
-              var aspectRatio = window.innerWidth / window.innerHeight;
-        
-              console.log( width, height );
-        
-              hint = {
+<script src="./js/stats.min.js"></script>
+<script src="main_worker.js"></script>
+
+<script>
+    var statsMain = new Stats();
+    statsMain.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+    statsMain.domElement.style.position = 'relative';
+    statsMain.domElement.style.left = '0px';
+    statsMain.domElement.style.top = '0px';
+    document.getElementById("stats1").appendChild(statsMain.dom);
+
+    var statsWorker = new Stats();
+    statsWorker.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+    statsWorker.domElement.style.position = 'relative';
+    statsWorker.domElement.style.left = '0px';
+    statsWorker.domElement.style.top = '0px';
+    document.getElementById("stats2").appendChild(statsWorker.dom);
+
+    var container = document.getElementById('container');
+    var video = document.getElementById('video');
+    var canvas_draw = document.getElementById('canvas_draw');
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        var hint = {};
+        if (isMobile()) {
+            hint = {
+                facingMode: {"ideal": "environment"},
                 audio: false,
                 video: {
-                  facingMode: 'environment',
-                  width: { min: width, max: width }
+                    width: { ideal: 480 },
+                    height: { ideal: 640 },
                 },
-              };
-        
-              console.log( hint );
-            }
-        
-            navigator.mediaDevices.getUserMedia( hint ).then( function( stream ) {
-              video.srcObject = stream;
-              video.addEventListener( 'loadedmetadata', function() {
-                video.play();
-        
-                console.log( 'video', video, video.videoWidth, video.videoHeight );
-        
-                start(
-                  container,
-                  './trex/trex-image/trex',
-                  video,
-                  video.videoWidth,
-                  video.videoHeight,
-                  canvas,
-                  function() {
-                   statsMain.update()
-                  },
-                  function() {
-                    statsWorker.update();
-                  }
-                );
-              } );
-            } );
-          }
-    </script>
+            };
+        }
+
+        navigator.mediaDevices.getUserMedia({video: hint}).then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+            video.addEventListener("loadedmetadata", function() {
+                start(container, markers["pinball"], video, video.videoWidth, video.videoHeight, canvas_draw, function() {statsMain.update()}, function() {statsWorker.update()});
+            });
+        });
+    }
+</script>
 </body>
 </html>
